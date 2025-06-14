@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    container_name: referrerDB
+    restart: always
+    environment:
+      - POSTGRES_DB=referrerDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"

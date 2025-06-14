@@ -1,0 +1,17 @@
+{
+  "extends": "@referrer/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/features/auth/*.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}

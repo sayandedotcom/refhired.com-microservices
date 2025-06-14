@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id                  String      @id @default(cuid())
+  email               String      @unique
+  userName            String      @unique @map("user_name")
+  emailVerified       DateTime?   @map("email_verified")
+  image               String?
+  overlayImage        String?     @map("overlay_image")
+  name                String?
+  bio                 String?
+  link                String?
+  location            String?
+  stars               Int?        @default(0)
+  starsEarned         Int?        @default(0) @map("stars_earned")
+  stripeCustomerId    String?     @unique @map("stripe_customer_id")
+  stripeAccountId     String?     @unique @map("stripe_account_id")
+  stripeConnectLinked Boolean     @default(false) @map("stripe_connect_linked")
+  updatedAt           DateTime?   @updatedAt @map("updated_at")
+  workingAt           String?     @map("working_at")
+  createdAt           DateTime?   @default(now()) @map("created_at")
+  paidForDashboard    Boolean     @default(false) @map("paid_for_dashboard")
+  accounts            Account[]
+  applied             Applied[]
+  bookmarks           Bookmarks[]
+  comments            Comments[]
+  posts               Posts[]
+  sessions            Session[]
+
+  @@index([userName])
+  @@map("user")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("account")
+}
+
+model Session {
+  sessionToken String   @unique
+  expires      DateTime
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("session")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_token")
+}
+
+model Posts {
+  id              String      @id @default(cuid())
+  postType        PostType    @default(POST) @map("post_type")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+  description     String?
+  accept          Json?
+  expiresAt       DateTime?   @map("expires_at")
+  jobRole         String?     @map("job_role")
+  jobType         String?     @map("job_type")
+  jobExperience   Int?        @map("job_experience")
+  jobLocationType String?     @map("job_location_type")
+  jobLocation     String?     @map("job_location")
+  jobCompensation String?     @map("job_compensation")
+  userId          String
+  stars           Int?        @default(0)
+  acceptLimit     Int?        @map("accept_limit")
+  totalApplied    Int?        @default(0)
+  totalComments   Int?        @default(0)
+  companyName     String?     @map("company_name")
+  jobCode         String?     @map("job_code")
+  jobURL          String?     @map("job_url")
+  isPause         Boolean     @default(false)
+  applied         Applied[]
+  bookmarks       Bookmarks[]
+  comments        Comments[]
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags            Tags[]      @relation("PostsToTags")
+  hashtags        Hashtags[]  @relation("PostsToHashtags")
+
+  @@index([userId])
+  @@map("posts")
+}
+
+model Applied {
+  id         String     @id @default(cuid())
+  appliedAt  DateTime   @default(now())
+  userId     String
+  postId     String     @map("post_id")
+  applyInfo  Json?      @map("apply_info")
+  visibility Visibility @default(Unread)
+  status     Status     @default(Pending)
+  reply      String?
+  posts      Posts      @relation(fields: [postId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+  @@map("applied")
+}
+
+model Tags {
+  id    String  @id @default(cuid())
+  name  String  @unique
+  posts Posts[] @relation("PostsToTags")
+
+  @@map("tags")
+}
+
+model Hashtags {
+  id    String  @id @default(cuid())
+  name  String  @unique
+  posts Posts[] @relation("PostsToHashtags")
+
+  @@map("hashtags")
+}
+
+model Comments {
+  text      String
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  posts     Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("comments")
+}
+
+model Bookmarks {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  posts     Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, postId])
+  @@map("bookmarks")
+}
+
+enum PostType {
+  REFERRALPOST
+  FINDREFERRER
+  POST
+}
+
+enum Visibility {
+  Read
+  Unread
+}
+
+enum Status {
+  Pending
+  Accepted
+  Rejected
+}
