@@ -15,4 +15,4 @@ var OrderStatus;
     // The order has reserved the ticket and the user has
     // provided payment successfully
     OrderStatus["Complete"] = "complete";
-})(OrderStatus || (exports.OrderStatus = OrderStatus = {}));
+})(OrderStatus = exports.OrderStatus || (exports.OrderStatus = {}));

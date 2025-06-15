@@ -10,4 +10,4 @@ var Subjects;
     Subjects["ApplyCreated"] = "apply:created";
     Subjects["ApplyDeleted"] = "apply:deleted";
     Subjects["PaymentCreated"] = "payment:created";
-})(Subjects || (exports.Subjects = Subjects = {}));
+})(Subjects = exports.Subjects || (exports.Subjects = {}));
