@@ -3,11 +3,23 @@ export interface PostCreatedEvent {
     subject: Subjects.PostCreated;
     data: {
         id: string;
-        imageUrl: string;
-        caption?: string | undefined;
+        postType?: string | undefined;
+        description?: string | undefined;
+        accept?: any[] | undefined;
+        acceptLimit?: number | undefined;
+        companyName?: string | undefined;
+        expiresAt?: string | undefined;
+        jobCode?: string | undefined;
+        jobCompensation?: string | undefined;
+        jobExperience?: number | undefined;
+        jobLocationType?: string | undefined;
+        jobLocation?: string | undefined;
+        jobRole?: string | undefined;
+        jobType?: string | undefined;
+        jobURL?: string | undefined;
+        tags?: string[] | undefined;
+        stars?: number | undefined;
         userId: string;
-        username: string;
-        avatarUrl?: string | undefined;
         version: number;
         createdAt: string;
         updatedAt: string;
