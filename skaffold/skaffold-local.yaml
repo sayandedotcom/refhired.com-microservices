@@ -1,0 +1,53 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+build:
+  artifacts:
+    - image: <your docker hub id>/auth
+      context: auth
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: <your docker hub id>/posts
+      context: posts
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: <your docker hub id>/apply
+      context: apply
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: <your docker hub id>/client
+      context: client
+      sync:
+        infer:
+          - "**/*.ts"
+          - "**/*.tsx"
+          - "**/*.css"
+      docker:
+        dockerfile: Dockerfile
+    - image: <your docker hub id>/payments
+      context: payments
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+manifests:
+  rawYaml:
+    - ./infra/k8s-local/k8s/*
+    - ./infra/k8s-local/k8s-dev/*
+deploy:
+  kubectl: {}
