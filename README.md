@@ -5,22 +5,24 @@ You can read more about this in [this blog](https://github.com/sayandedotcom/ref
 
 ## Tech Stack List
 
-**Next.js 15**: A React framework for building server-side rendered applications.
-**TailwindCSS**: A utility-first CSS framework for styling the front-end.
-**Shadcn**: A component library for building user interfaces with React.
-**Node.js**: A JavaScript runtime for building server-side applications.
-**Express.js**: A web application framework for Node.js, used for building APIs.
-**NATS Streaming**: A lightweight messaging system for microservices communication.
-**Prisma**: An ORM (Object-Relational Mapping) tool for Node.js, used for database interactions.
-**PostgreSQL**: A relational database management system used for storing data.
-**Mongoose**: An ODM (Object Data Modeling) library for MongoDB, used for database interactions.
-**MongoDB**: A NoSQL database used for storing data in a flexible, JSON-like format.
-**Stripe**: A payment processing platform for handling payments and subscriptions.
-**Kubernetes**: A container orchestration platform for deploying and managing microservices.
-**Docker**: A platform for developing, shipping, and running applications in containers.
-**Skaffold**: A tool for continuous development and deployment of Kubernetes applications.
-**GitHub Actions**: A CI/CD tool for automating workflows, such as building, testing, and deploying applications.
-**Google Cloud Platform (GCP)**: A cloud computing platform for hosting and managing applications and services.
+| Tech Stack                      | Info.                                                                                         |
+| ------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Next.js 15**                  | A React framework for building server-side rendered applications.                             |
+| **TailwindCSS**                 | A utility-first CSS framework for styling the front-end.                                      |
+| **Shadcn**                      | A component library for building user interfaces with React.                                  |
+| **Node.js**                     | A JavaScript runtime for building server-side applications.                                   |
+| **Express.js**                  | A web application framework for Node.js, used for building APIs.                              |
+| **NATS Streaming**              | A lightweight messaging system for microservices communication.                               |
+| **Prisma**                      | An ORM (Object-Relational Mapping) tool for Node.js, used for database interactions.          |
+| **PostgreSQL**                  | A relational database management system used for storing data.                                |
+| **Mongoose**                    | An ODM (Object Data Modeling) library for MongoDB, used for database interactions.            |
+| **MongoDB**                     | A NoSQL database used for storing data in a flexible, JSON-like format.                       |
+| **Stripe**                      | A payment processing platform for handling payments and subscriptions.                        |
+| **Kubernetes**                  | A container orchestration platform for deploying and managing microservices.                  |
+| **Docker**                      | A platform for developing, shipping, and running applications in containers.                  |
+| **Skaffold**                    | A tool for continuous development and deployment of Kubernetes applications.                  |
+| **GitHub Actions**              | A CI/CD tool for automating workflows, such as building, testing, and deploying applications. |
+| **Google Cloud Platform (GCP)** | A cloud computing platform for hosting and managing applications and services.                |
 
 ## Services List
 
