@@ -93,8 +93,16 @@ The `.github` folder contains the GitHub Actions workflows for the project. Thes
    git clone https://github.com/sayandedotcom/refhired.com-microservices
    ```
 
-2. Copy and paste one file contents from `skaffold` folder to the root of the project basded on which environment you want to run the project in cloud or locally.
+2. Copy and paste one file contents from `skaffold` folder to the root of the project basded on which environment you want to run the project in cloud or locally.If you want to run the project in cloud ( GCP ) then copy and paste `skaffold-gcp.yaml` file, if you want to run the project locally ( docker desktop ) then copy and paste `skaffold-local.yaml` file.
 
-   ```bash
-    skaffold dev
-   ```
+### To run the project in cloud ( GCP )
+
+```bash
+skaffold dev
+```
+
+#### To run the project locally ( docker desktop )
+
+```bash
+skaffold dev
+```
