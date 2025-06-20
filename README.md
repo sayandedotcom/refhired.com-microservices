@@ -98,5 +98,5 @@ The `.github` folder contains the GitHub Actions workflows for the project. Thes
    Folow the instructions in the respective file to deploy the services. and then run:
 
    ```bash
-         skaffold dev
+   skaffold dev
    ```
