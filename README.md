@@ -28,13 +28,14 @@ You can read more about this in [this blog](https://github.com/sayandedotcom/ref
 
 These folder contains the individual services for microservices for the project. Each service is a separate package that can be developed, tested, scales and deployed independently.
 
-| Index No. | Folder     | Services                            | Tech Stack                                                      |
-| --------- | ---------- | ----------------------------------- | --------------------------------------------------------------- |
-| 1         | `apply`    | Feature to apply for referrals      | Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL         |
-| 2         | `auth`     | Centeralised authentication service | Node.js, Express.js, NATS Streaming, Mongoose, MongoDB          |
-| 3         | `client`   | Front-end                           | Next.js 15, TailwindCSS, Shadcn, React Query                    |
-| 4         | `payments` | Payment Service                     | Stripe, Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL |
-| 5         | `posts`    | To create or update posts           | Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL         |
+| Index No. | Folder               | Services                            | Tech Stack                                                      |
+| --------- | -------------------- | ----------------------------------- | --------------------------------------------------------------- |
+| 1         | `apply`              | Feature to apply for referrals      | Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL         |
+| 2         | `auth`               | Centeralised authentication service | Node.js, Express.js, NATS Streaming, Mongoose, MongoDB          |
+| 3         | `client`             | Front-end                           | Next.js 15, TailwindCSS, Shadcn, React Query                    |
+| 4         | `payments`           | Payment Service                     | Stripe, Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL |
+| 5         | `posts`              | To create or update posts           | Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL         |
+| 6         | `posts-cleanup-corn` | Cron Job to delete expired posts    | Node.js, Express.js, NATS Streaming, Prisma, PostgreSQL         |
 
 ## Important Folders
 
@@ -42,16 +43,16 @@ These folder contains the individual services for microservices for the project.
 
 The `infra` folder contains the infrastructure YAML files for Kubernetes deployments, service, and ingress files. It is used to set up the necessary infrastructure for the microservices to run in a Kubernetes environment.
 
-| Index No. | Folder Name       | Info.                                             | Folder     | Info.                                      |
-| --------- | ----------------- | ------------------------------------------------- | ---------- | ------------------------------------------ |
-| 1         | `infra/k8s-gcp`   | K8 files for cloud ( GCP ) deployement            | `k8s`      | K8 deployement files for all services      |
-|           |                   |                                                   | `k8s-dev`  | File for ingress nginx for development env |
-|           |                   |                                                   | `k8s-prod` | File for ingress nginx for production env  |
-| 2         | `infra/k8s-local` | K8 files for local ( docker desktop ) deployement | `k8s`      | K8 deployement files for all services      |
-|           |                   |                                                   | `k8s-dev`  | File for ingress nginx for development env |
-|           |                   |                                                   | `k8s-prod` | File for ingress nginx for production env  |
+| Index No. | Folder Name       | Info.                                              | Folder     | Info.                                      |
+| --------- | ----------------- | -------------------------------------------------- | ---------- | ------------------------------------------ |
+| 1         | `infra/k8s-gcp`   | K8s files for cloud ( GCP ) deployement            | `k8s`      | K8s deployement files for all services     |
+|           |                   |                                                    | `k8s-dev`  | File for ingress nginx for development env |
+|           |                   |                                                    | `k8s-prod` | File for ingress nginx for production env  |
+| 2         | `infra/k8s-local` | K8s files for local ( docker desktop ) deployement | `k8s`      | K8s deployement files for all services     |
+|           |                   |                                                    | `k8s-dev`  | File for ingress nginx for development env |
+|           |                   |                                                    | `k8s-prod` | File for ingress nginx for production env  |
 
-### 2. `packages`\*\* folder
+### 2. `packages` folder
 
 The `packages` folder contains the common packages to be used by each services in microservices for the project.
 
@@ -67,7 +68,7 @@ The `skaffold` folder contains the Skaffold configuration files for the project.
 
 | Index No. | Folder Name                    | Info.                                    |
 | --------- | ------------------------------ | ---------------------------------------- |
-| 1         | `skaffold/skaffold-gcp.yaml`   | For loud ( GCP ) deployement             |
+| 1         | `skaffold/skaffold-gcp.yaml`   | For cloud ( GCP ) deployement            |
 | 2         | `skaffold/skaffold-local.yaml` | For local ( docker desktop ) deployement |
 
 ### 4. `.github` folder
@@ -93,16 +94,9 @@ The `.github` folder contains the GitHub Actions workflows for the project. Thes
    git clone https://github.com/sayandedotcom/refhired.com-microservices
    ```
 
-2. Copy and paste one file contents from `skaffold` folder to the root of the project basded on which environment you want to run the project in cloud or locally.If you want to run the project in cloud ( GCP ) then copy and paste `skaffold-gcp.yaml` file, if you want to run the project locally ( docker desktop ) then copy and paste `skaffold-local.yaml` file.
+2. Navigate to `deploy guide` folder, it containes the deployment guide for local ( local.md ) and cloud ( google-cloud.md ) deployement.
+   Folow the instructions in the respective file to deploy the services. and then run:
 
-### To run the project in cloud ( GCP )
-
-```bash
-skaffold dev
-```
-
-#### To run the project locally ( docker desktop )
-
-```bash
-skaffold dev
-```
+   ```bash
+         skaffold dev
+   ```
