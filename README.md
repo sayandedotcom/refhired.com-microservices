@@ -1,7 +1,8 @@
 # Info
 
 This github reopository is minimal (not all features) mictoservice implementation of [this project](https://github.com/sayandedotcom/refhired.com).
-You can read more about this in [this blog](https://github.com/sayandedotcom/refhired.com)
+
+<!-- You can read more about this in [this blog](https://github.com/sayandedotcom/refhired.com) -->
 
 ## Tech Stack List
 
@@ -23,6 +24,23 @@ You can read more about this in [this blog](https://github.com/sayandedotcom/ref
 | **Skaffold**                    | A tool for continuous development and deployment of Kubernetes applications.                  |
 | **GitHub Actions**              | A CI/CD tool for automating workflows, such as building, testing, and deploying applications. |
 | **Google Cloud Platform (GCP)** | A cloud computing platform for hosting and managing applications and services.                |
+
+## Kubernetes Features used
+
+| Feature                      | Info.                                                                                                    |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Pods**                     | The smallest deployable units in Kubernetes, used to run microservices.                                  |
+| **ReplicaSets**              | Used to ensure that a specified number of pod replicas are running at any given time.                    |
+| **Deployments**              | Used to manage the deployment of microservices, ensuring they are running and updated.                   |
+| **Services**                 | Used to expose microservices and enable communication between them.                                      |
+| **Ingress-Nginx Controller** | Used to manage external access to the microservices, routing traffic to the appropriate services.        |
+| **Jobs**                     | Used to run one-time tasks, such as database migrations or data processing.                              |
+| **CronJobs**                 | Used to schedule recurring tasks, such as cleaning up expired posts in the `posts-cleanup-corn` service. |
+| **ConfigMaps**               | Used to manage configuration data for microservices, such as environment variables.                      |
+| **Secrets**                  | Used to manage sensitive information, such as API keys and database credentials.                         |
+| **Persistent Volumes**       | Used to manage persistent storage for microservices, such as databases.                                  |
+| **Resource Quotas**          | Used to limit the resources (CPU, memory) that microservices can consume within a namespace.             |
+| **CornJob**                  | Used to schedule tasks, such as cleaning up expired posts in the `posts-cleanup-corn` service.           |
 
 ## Services List
 
