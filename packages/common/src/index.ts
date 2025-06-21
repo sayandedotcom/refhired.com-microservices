@@ -14,10 +14,15 @@ export * from "./middlewares/validate-request";
 export * from "./nats-streaming/base-listener";
 export * from "./nats-streaming/base-publisher";
 export * from "./nats-streaming/subjects";
+
+export * from "./events/types/apply-status";
+
 export * from "./events/apply-created-event";
 export * from "./events/apply-deleted-event";
-export * from "./events/types/order-status";
+export * from "./events/apply-reply-event";
+
 export * from "./events/post-created-event";
 export * from "./events/post-deleted-event";
 export * from "./events/post-updated-event";
+
 export * from "./events/user-created-event";

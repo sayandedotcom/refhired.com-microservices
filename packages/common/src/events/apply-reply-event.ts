@@ -1,12 +1,13 @@
 import { Subjects } from "../nats-streaming/subjects";
+import { ApplyStatus } from "./types/apply-status";
 
-export interface ApplyCreatedEvent {
+export interface ApplyReplyEvent {
   subject: Subjects.ApplyCreated;
   data: {
     id: string;
     userId: string;
     postId: string;
-    applyInfo: any; // JSON object of any structure
-    appliedAt: string; // ISO 8601 date string
+    status: ApplyStatus;
+    reply: String;
   };
 }
