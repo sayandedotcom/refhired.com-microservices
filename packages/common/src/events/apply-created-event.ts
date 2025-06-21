@@ -7,6 +7,5 @@ export interface ApplyCreatedEvent {
     userId: string;
     postId: string;
     applyInfo: any; // JSON object of any structure
-    appliedAt: string; // ISO 8601 date string
   };
 }

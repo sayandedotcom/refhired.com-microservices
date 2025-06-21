@@ -3,7 +3,10 @@ export interface PostUpdatedEvent {
     subject: Subjects.PostUpdated;
     data: {
         id: string;
-        caption: string;
+        description?: string | null;
+        accept?: any;
+        expiresAt?: string | null;
+        stars?: number | null;
         version: number;
     };
 }
