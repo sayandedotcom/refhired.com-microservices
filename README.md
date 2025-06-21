@@ -112,7 +112,7 @@ The `.github` folder contains the GitHub Actions workflows for the project. Thes
    git clone https://github.com/sayandedotcom/refhired.com-microservices
    ```
 
-2. Navigate to `deploy guide` folder, it containes the deployment guide for local ( local.md ) and cloud ( google-cloud.md ) deployement.
+2. Navigate to `deploy guide` folder, it containes the deployment guide for local ( [local.md](https://github.com/sayandedotcom/refhired.com-microservices/blob/main/deploy-guide/local.md)) and cloud ( google-cloud.md ) deployement.
    Folow the instructions in the respective file to deploy the services. and then run:
 
    ```bash
