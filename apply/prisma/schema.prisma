@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Posts {
+  id           String    @id @default(cuid())
+  userId       String    @map("user_id")
+  accept       Json?
+  expiresAt    DateTime? @map("expires_at")
+  stars        Int?      @default(0)
+  totalApplied Int?      @default(0) @map("total_applied")
+  version      Int       @default(0)
+  Applied      Applied[]
+
+  @@map("posts")
+}
+
+model Applied {
+  id        String   @id @default(cuid())
+  appliedAt DateTime @default(now())
+  userId    String
+  postId    String   @map("post_id")
+  applyInfo Json?    @map("apply_info")
+  status    Status   @default(Pending)
+  reply     String?
+  posts     Posts    @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+  @@map("applied")
+}
+
+enum Status {
+  Pending
+  Accepted
+  Rejected
+}

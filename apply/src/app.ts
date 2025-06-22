@@ -1,30 +1,35 @@
-import 'express-async-errors';
+import "express-async-errors";
 
-import { NotFoundError, currentUser, errorHandler } from '@micro_insta/common';
-import cookieSession from 'cookie-session';
-import express from 'express';
-import { createCommentRouter } from './routes/new';
-import { deleteCommentRouter } from './routes/delete';
+import { NotFoundError, currentUser, errorHandler } from "@refhiredcom/common";
+import cookieSession from "cookie-session";
+import express from "express";
+import { createApplyRouter } from "./routes/create.route";
+import { deleteApplyRouter } from "./routes/delete.route";
 
+import dotenv from "dotenv";
+import { allPostsRouter } from "./routes/all.route";
+
+dotenv.config();
 const app = express();
 
-app.set('trust proxy', true); //traffic is being proxied to our app through ingress-nginx
+app.set("trust proxy", true);
 
 app.use(express.json());
 
 app.use(
-    cookieSession({
-        signed: false,
-        secure: false,
-    })
+  cookieSession({
+    signed: false,
+    secure: false,
+  })
 );
 
 app.use(currentUser);
-app.use(createCommentRouter);
-app.use(deleteCommentRouter);
+app.use(createApplyRouter);
+app.use(deleteApplyRouter);
+app.use(allPostsRouter);
 
-app.all('*', async (_req, _res, _next) => {
-    throw new NotFoundError();
+app.all("*", async (_req, _res, _next) => {
+  throw new NotFoundError();
 }); //catch all route handler not defined above
 
 app.use(errorHandler);
