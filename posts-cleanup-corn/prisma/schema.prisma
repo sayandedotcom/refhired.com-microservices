@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Posts {
+  id           String    @id @default(cuid())
+  userId       String    @map("user_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  description  String?
+  accept       Json?
+  expiresAt    DateTime? @map("expires_at")
+  stars        Int?      @default(0)
+  totalApplied Int?      @default(0)
+  version      Int       @default(0)
+
+  @@map("posts")
+}
