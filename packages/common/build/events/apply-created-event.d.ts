@@ -6,6 +6,5 @@ export interface ApplyCreatedEvent {
         userId: string;
         postId: string;
         applyInfo: any;
-        appliedAt: string;
     };
 }
