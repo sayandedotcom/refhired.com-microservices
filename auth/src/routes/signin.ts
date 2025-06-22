@@ -1,7 +1,6 @@
 import { BadRequestError, validateRequest } from "@refhiredcom/common";
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
-
 import { User } from "../models/user";
 import { Password } from "../utils/password";
 
@@ -33,7 +32,10 @@ router.post(
       throw new BadRequestError("Invalid credentials");
     }
 
-    const passwordsMatch = await Password.compare(existingUser.password, password);
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
 
     if (!passwordsMatch) {
       throw new BadRequestError("Invalid credentials");

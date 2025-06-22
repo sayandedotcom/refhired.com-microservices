@@ -1,11 +1,9 @@
 import { BadRequestError, validateRequest } from "@refhiredcom/common";
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
-
-// import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
 import { User } from "../models/user";
-
-// import { natsWrapper } from "../nats-wrapper";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
@@ -35,7 +33,9 @@ router.post(
     const { email, password, username } = req.body;
 
     if (!email || !password || !username) {
-      throw new BadRequestError("Email or password or username was not provided");
+      throw new BadRequestError(
+        "Email or password or username was not provided"
+      );
     }
 
     const existingUser = await User.findOne({ email });
@@ -52,10 +52,10 @@ router.post(
       jwt: userJWT,
     };
 
-    // await new UserCreatedPublisher(natsWrapper.client).publish({
-    //   id: user.id,
-    //   username: user.username,
-    // });
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      id: user.id,
+      username: user.username,
+    });
 
     res.status(201).send(user);
   }
