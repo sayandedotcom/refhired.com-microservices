@@ -1,33 +1,39 @@
-import 'express-async-errors';
+import "express-async-errors";
 
-import { NotFoundError, currentUser, errorHandler } from '@micro_insta/common';
-import cookieSession from 'cookie-session';
-import express from 'express';
-import { newPostRouter } from './routes/new';
-import { deletePostRouter } from './routes/delete';
-import { updatePostRouter } from './routes/update';
+import { NotFoundError, currentUser, errorHandler } from "@refhiredcom/common";
+import cookieSession from "cookie-session";
+import express from "express";
+import { newPostRouter } from "./routes/create.route";
+import { deletePostRouter } from "./routes/delete.route";
+import { updatePostRouter } from "./routes/update.route";
+import { expirationRouter } from "./routes/expiration.route";
+import { allPostsRouter } from "./routes/all.route";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 
-app.set('trust proxy', true); //traffic is being proxied to our app through ingress-nginx
+app.set("trust proxy", true);
 
 app.use(express.json());
 
 app.use(
-    cookieSession({
-        signed: false,
-        secure: false,
-    })
+  cookieSession({
+    signed: false,
+    secure: false,
+  })
 );
 
 app.use(currentUser);
 app.use(newPostRouter);
 app.use(deletePostRouter);
 app.use(updatePostRouter);
+app.use(expirationRouter);
+app.use(allPostsRouter);
 
-app.all('*', async (_req, _res, _next) => {
-    throw new NotFoundError();
-}); //catch all route handler not defined above
+app.all("*", async (_req, _res, _next) => {
+  throw new NotFoundError();
+});
 
 app.use(errorHandler);
 
