@@ -1,6 +1,6 @@
 {
   "name": "@refhiredcom/common",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "This is a common library shared by all the microservices by refhired.com project.",
   "author": {
     "email": "sayandeten@gmail.com",
