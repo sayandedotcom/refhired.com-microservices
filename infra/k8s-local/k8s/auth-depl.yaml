@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: gcr.io/natural-furnace-461617-e0/auth
+          image: <your-docker-username>/auth
           env:
             - name: JWT_KEY
               valueFrom:
@@ -23,14 +23,14 @@ spec:
                   key: JWT_KEY
             - name: MONGO_URI
               value: "mongodb://auth-mongo-srv:27017/auth"
-            # - name: NATS_URI
-            #   value: "nats://nats-srv:4222"
-            # - name: NATS_CLUSTER_ID
-            #   value: "insta"
-            # - name: NATS_CLIENT_ID
-            #   valueFrom:
-            #     fieldRef:
-            #       fieldPath: metadata.name
+            - name: NATS_URI
+              value: "nats://nats-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: "refhired"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 ---
 apiVersion: v1
 kind: Service

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-pg-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts-pg
+  template:
+    metadata:
+      labels:
+        app: posts-pg
+    spec:
+      containers:
+        - name: posts-pg
+          image: postgres
+          env:
+            - name: POSTGRES_DB
+              value: "db"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          volumeMounts:
+            - name: posts-pg-pvc
+              readOnly: false
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: posts-pg-pvc
+          persistentVolumeClaim:
+            claimName: posts-pg-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-pg-srv
+spec:
+  selector:
+    app: posts-pg
+  type: ClusterIP
+  ports:
+    - name: db
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: posts-pg-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100M

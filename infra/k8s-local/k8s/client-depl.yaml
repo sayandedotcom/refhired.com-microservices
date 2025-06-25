@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: gcr.io/natural-furnace-461617-e0/client
+          image: <your-docker-username>/auth
 ---
 apiVersion: v1
 kind: Service

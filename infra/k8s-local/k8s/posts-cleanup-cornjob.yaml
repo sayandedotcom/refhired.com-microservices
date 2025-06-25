@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: delete-expired-posts
+  labels:
+    app: posts-cleanup
+spec:
+  schedule: "*/1 * * * *" # Every minute
+  timeZone: "Asia/Kolkata"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup
+              image: gcr.io/natural-furnace-461617-e0/posts-cleanup-corn
+              # command: ["npx", "ts-node", "cron/expirePosts.ts"]
+              env:
+                - name: DATABASE_URL
+                  value: "postgresql://postgres:postgres@likes-pg-srv:5432/db?schema=public"
+          restartPolicy: OnFailure

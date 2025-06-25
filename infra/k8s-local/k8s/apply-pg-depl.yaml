@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apply-pg-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apply-pg
+  template:
+    metadata:
+      labels:
+        app: apply-pg
+    spec:
+      initContainers:
+        - name: migrate
+          image: gcr.io/natural-furnace-461617-e0/posts
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "until nc -z posts-pg-srv 5432; do echo '⏳ Waiting for Postgres...'; sleep 2; done && npx prisma migrate deploy",
+            ]
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@posts-pg-srv:5432/db?schema=public"
+      containers:
+        - name: apply-pg
+          image: postgres
+          env:
+            - name: POSTGRES_DB
+              value: "db"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          volumeMounts:
+            - name: apply-pg-pvc
+              readOnly: false
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: apply-pg-pvc
+          persistentVolumeClaim:
+            claimName: apply-pg-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apply-pg-srv
+spec:
+  selector:
+    app: apply-pg
+  type: ClusterIP
+  ports:
+    - name: db
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apply-pg-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100M

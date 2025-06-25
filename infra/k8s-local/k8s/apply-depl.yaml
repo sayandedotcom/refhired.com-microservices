@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apply-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apply
+  template:
+    metadata:
+      labels:
+        app: apply
+    spec:
+      containers:
+        - name: apply
+          image: <your-docker-username>/apply
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@posts-pg-srv:5432/db?schema=public"
+            - name: NATS_URI
+              value: "nats://nats-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: "insta"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apply-srv
+spec:
+  selector:
+    app: apply
+  type: ClusterIP
+  ports:
+    - name: apply
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

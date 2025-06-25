@@ -1,1 +1,45 @@
-# Copy and paste any file from skaffold folder based on your needs.
+apiVersion: skaffold/v4beta13
+kind: Config
+build:
+  artifacts:
+    - image: <your-docker-username>/auth
+      context: auth
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: <your-docker-username>/posts
+      context: posts
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: <your-docker-username>/apply
+      context: apply
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: <your-docker-username>/client
+      context: client
+      sync:
+        infer:
+          - "**/*.ts"
+          - "**/*.tsx"
+          - "**/*.css"
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+manifests:
+  rawYaml:
+    - ./infra/k8s-local/k8s/*
+    - ./infra/k8s-local/k8s-dev/*
+deploy:
+  kubectl: {}

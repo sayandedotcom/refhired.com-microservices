@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      initContainers:
+        - name: migrate
+          image: gcr.io/natural-furnace-461617-e0/posts
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "until nc -z posts-pg-srv 5432; do echo '⏳ Waiting for Postgres...'; sleep 2; done && npx prisma migrate deploy",
+            ]
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@posts-pg-srv:5432/db?schema=public"
+      containers:
+        - name: posts
+          image: <your-docker-username>/posts
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: PORT
+              value: "3000"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@posts-pg-srv:5432/db?schema=public"
+            - name: NATS_URI
+              value: "nats://nats-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: "refhired"
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  selector:
+    app: posts
+  type: ClusterIP
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
