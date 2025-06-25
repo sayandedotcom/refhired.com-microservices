@@ -8,6 +8,14 @@ router.get("/api/posts", async (_, res: Response) => {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      user: {
+        select: {
+          id: true,
+          userName: true,
+        },
+      },
+    },
   });
 
   res.status(201).send(posts);

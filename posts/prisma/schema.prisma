@@ -7,6 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  userName String  @unique @map("user_name")
+  posts    Posts[]
+
+  @@map("user")
+}
+
 model Posts {
   id           String    @id @default(cuid())
   userId       String    @map("user_id")
@@ -17,6 +26,8 @@ model Posts {
   stars        Int?      @default(0)
   totalApplied Int?      @default(0) @map("total_applied")
   version      Int       @default(0)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([id, version])
   @@map("posts")
 }

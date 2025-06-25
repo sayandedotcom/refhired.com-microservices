@@ -2,6 +2,7 @@ import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 import prisma from "./client";
 import { ApplyCreatedEventListener } from "./events/listner/apply-created-listner";
+import { UserCreatedEventListener } from "./events/listner/user-created-listner";
 
 const bootstrap = async () => {
   if (!process.env.JWT_KEY) {
@@ -41,12 +42,13 @@ const bootstrap = async () => {
     process.on("SIGTERM", () => natsWrapper.client.close());
 
     new ApplyCreatedEventListener(natsWrapper.client).listen();
+    new UserCreatedEventListener(natsWrapper.client).listen();
   } catch (error) {
     console.error(error);
   }
 
-  app.listen(3001, () => {
-    console.log("Listening on port 3001!");
+  app.listen(3000, () => {
+    console.log("Listening on port 3000!");
   });
 };
 

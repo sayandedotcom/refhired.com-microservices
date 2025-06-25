@@ -13,6 +13,10 @@ const router = Router();
 
 interface UpdatePostRequestBody {
   description: string;
+  accept?: any;
+  expiresAt?: string | null;
+  stars?: number | null;
+  version: number;
 }
 
 router.put(
@@ -24,36 +28,47 @@ router.put(
     req: Request<{ id: string }, {}, UpdatePostRequestBody>,
     res: Response
   ) => {
-    const { description } = req.body;
+    const { description, accept, expiresAt, stars, version } = req.body;
     const { id } = req.params;
 
-    const post = await prisma.posts.findUnique({
-      where: { id: id },
-    });
+    const result = await prisma.$transaction(async (tx) => {
+      const post = await prisma.posts.findUnique({
+        where: { id: id, version },
+      });
 
-    if (!post) {
-      throw new Error("Post not found");
-    }
+      if (!post) {
+        throw new Error("Post not found");
+      }
 
-    if (post.userId !== req.currentUser!.id) {
-      throw new NotAuthorizedError();
-    }
+      if (post.userId !== req.currentUser!.id) {
+        throw new NotAuthorizedError();
+      }
 
-    await prisma.posts.update({
-      where: { id: id },
-      data: {
-        description: description,
-        version: { increment: 1 },
-      },
+      const { count } = await tx.posts.updateMany({
+        where: { id, version: post.version }, // OCC guard
+        data: {
+          description,
+          accept,
+          expiresAt,
+          stars,
+          version: { increment: 1 },
+        },
+      });
+
+      if (count === 0) {
+        throw new Error("Version conflict – please reload and try again");
+      }
+
+      return tx.posts.findUnique({ where: { id } });
     });
 
     await new PostUpdatedPublisher(natsWrapper.client).publish({
-      id: post.id,
-      description: post.description,
-      version: post.version,
+      id: result!.id,
+      description: result!.description,
+      version: result!.version,
     });
 
-    res.status(200).send(post);
+    res.status(200).send(result);
   }
 );
 

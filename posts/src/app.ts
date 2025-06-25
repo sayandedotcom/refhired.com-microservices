@@ -8,7 +8,9 @@ import { deletePostRouter } from "./routes/delete.route";
 import { updatePostRouter } from "./routes/update.route";
 import { expirationRouter } from "./routes/expiration.route";
 import { allPostsRouter } from "./routes/all.route";
+import { allUserPostsRouter } from "./routes/all-posts.route";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -16,6 +18,8 @@ const app = express();
 app.set("trust proxy", true);
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use(
   cookieSession({
@@ -29,6 +33,7 @@ app.use(newPostRouter);
 app.use(deletePostRouter);
 app.use(updatePostRouter);
 app.use(expirationRouter);
+app.use(allUserPostsRouter);
 app.use(allPostsRouter);
 
 app.all("*", async (_req, _res, _next) => {

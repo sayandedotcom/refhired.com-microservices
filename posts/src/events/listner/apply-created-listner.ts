@@ -10,10 +10,10 @@ export class ApplyCreatedEventListener extends Listener<ApplyCreatedEvent> {
     data: ApplyCreatedEvent["data"],
     msg: Message
   ): Promise<void> {
-    const { id } = data;
+    const { postId } = data;
 
     const post = await prisma.posts.update({
-      where: { id },
+      where: { id: postId },
       data: {
         totalApplied: {
           increment: 1,
