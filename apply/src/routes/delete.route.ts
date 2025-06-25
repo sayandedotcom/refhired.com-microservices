@@ -4,7 +4,7 @@ import {
   validateRequest,
 } from "@refhiredcom/common";
 import { Request, Response, Router } from "express";
-import { body } from "express-validator";
+import { param } from "express-validator";
 import { natsWrapper } from "../nats-wrapper";
 import { ApplyDeletedPublisher } from "../event/publishers/apply-deleted-event-publisher";
 import prisma from "../client";
@@ -16,9 +16,9 @@ interface DeleteApplyRequestBody {
 }
 
 router.delete(
-  "/api/apply",
+  "/api/apply:postId",
   requireAuth,
-  [body("postId").isMongoId().withMessage("PostId must be provided")],
+  [param("postId").notEmpty().withMessage("Post ID must be provided")],
   validateRequest,
   async (req: Request<{}, {}, DeleteApplyRequestBody>, res: Response) => {
     const { postId } = req.body;

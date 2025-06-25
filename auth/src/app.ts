@@ -10,9 +10,13 @@ import { signupRouter } from "./routes/signup";
 
 import dotenv from "dotenv";
 
+import cors from "cors";
+
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 app.set("trust proxy", true); //traffic is being proxied to our app through ingress-nginx
 

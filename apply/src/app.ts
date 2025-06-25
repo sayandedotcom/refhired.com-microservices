@@ -5,9 +5,11 @@ import cookieSession from "cookie-session";
 import express from "express";
 import { createApplyRouter } from "./routes/create.route";
 import { deleteApplyRouter } from "./routes/delete.route";
+import { allAppliesRouter } from "./routes/all-applies.route";
+import { allPostsRouter } from "./routes/all.route";
 
 import dotenv from "dotenv";
-import { allPostsRouter } from "./routes/all.route";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,8 @@ const app = express();
 app.set("trust proxy", true);
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use(
   cookieSession({
@@ -26,6 +30,7 @@ app.use(
 app.use(currentUser);
 app.use(createApplyRouter);
 app.use(deleteApplyRouter);
+app.use(allAppliesRouter);
 app.use(allPostsRouter);
 
 app.all("*", async (_req, _res, _next) => {

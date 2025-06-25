@@ -1,23 +1,48 @@
-# Stage 1: Build dependencies
-FROM node:24.1.0-alpine AS builder
+# --- Builder ---
+  FROM node:24.1.0-alpine AS builder
 
-WORKDIR /app
-
-# Only copy dependency files first to leverage Docker layer caching
-COPY package.json yarn.lock ./
-
-# Install only production dependencies
-RUN yarn install --production
-
-# Copy the rest of the application
-COPY . .
-
-# Stage 2: Minimal runtime image
-FROM node:24.1.0-alpine
-
-WORKDIR /app
-
-# Copy built app and dependencies from builder
-COPY --from=builder /app /app
-
-CMD ["yarn", "start"]
+  WORKDIR /app
+  
+  # Install essential system packages
+  RUN apk add --no-cache openssl libc6-compat
+  
+  # Copy dependency files and install full dependencies (including devDependencies)
+  COPY package.json yarn.lock ./
+  RUN yarn install --frozen-lockfile
+  
+  # Copy the full source code
+  COPY . .
+  
+  # Build the application (assumes output to /app/build or similar)
+  RUN yarn build
+  
+  # --- Prod dependencies only ---
+  FROM node:24.1.0-alpine AS prod-deps
+  
+  WORKDIR /app
+  
+  COPY package.json yarn.lock ./
+  RUN yarn install --production --frozen-lockfile
+  
+  # --- Runtime ---
+  FROM node:24.1.0-alpine AS runtime
+  
+  WORKDIR /app
+  
+  # Install minimal runtime packages
+  RUN apk add --no-cache openssl libc6-compat
+  
+  ENV NODE_ENV=production
+  
+  # Copy production dependencies
+  COPY --from=prod-deps /app/node_modules ./node_modules
+  
+  # Copy built application
+  COPY --from=builder /app/build ./build
+  
+  # Optionally copy other needed assets like public/ or config/
+  # COPY --from=builder /app/public ./public
+  
+  # Start the app
+  CMD ["node", "build/index.js"]
+  

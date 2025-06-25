@@ -1,5 +1,5 @@
 {
-  "name": "posts",
+  "name": "apply",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -11,14 +11,16 @@
   "description": "It is a microservice that handles all the posts related operations.",
   "dependencies": {
     "@prisma/client": "^5.3.1",
-    "@refhiredcom/common": "^1.0.15",
+    "@refhiredcom/common": "^1.0.17",
     "@swc/core": "^1.3.23",
     "@swc/wasm": "^1.3.23",
     "@types/cookie-session": "^2.0.44",
+    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.15",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.11.17",
     "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
@@ -43,5 +45,8 @@
     "db:generate": "npx prisma generate",
     "db:studio": "npx prisma studio"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "resolutions": {
+    "@types/express": "^4.17.15"
+  }
 }

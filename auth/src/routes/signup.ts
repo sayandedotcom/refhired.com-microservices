@@ -10,7 +10,6 @@ const router = Router();
 interface SignupRequestBody {
   email: string;
   password: string;
-  username: string;
 }
 
 router.post(
@@ -21,18 +20,12 @@ router.post(
       .trim()
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
-    body("username")
-      .trim()
-      .notEmpty()
-      .withMessage("Username must be supplied")
-      .isLength({ min: 2, max: 20 })
-      .withMessage("Username must be between 2 and 20 characters"),
   ],
   validateRequest,
   async (req: Request<{}, {}, SignupRequestBody>, res: Response) => {
-    const { email, password, username } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !username) {
+    if (!email || !password) {
       throw new BadRequestError(
         "Email or password or username was not provided"
       );
@@ -44,7 +37,7 @@ router.post(
       throw new BadRequestError("Email in use");
     }
 
-    const user = await User.build({ email, username, password }).save();
+    const user = await User.build({ email, password }).save();
 
     const userJWT = User.createJWT(user);
 
@@ -54,7 +47,7 @@ router.post(
 
     await new UserCreatedPublisher(natsWrapper.client).publish({
       id: user.id,
-      username: user.username,
+      email,
     });
 
     res.status(201).send(user);
